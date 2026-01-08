@@ -1,0 +1,60 @@
+Implementation of an AND gate with perceptron:
+
+x1  x2  y AND TRUTH TABLE
+0   0   0
+0   1   1
+1   0   0
+1   1   1
+
+We need dot product w1x1 + w2x2
+
+TRY y = x1 + x2
+x1  x2  y 
+0   0   0
+0   1   1
+1   0   1
+1   1   2
+
+THIS DOESN'T MATCH THE AND TABLE
+
+Use a threshold t = 1.5
+
+TRY y = (activationFunction)(x1 + x2 - 1.5)
+x1  x2  y 
+0   0   0
+0   1   0
+1   0   0
+1   1   1
+
+x1  x2  y OR TRUTH TABLE
+0   0   0
+0   1   1
+1   0   1
+1   1   1
+
+
+TRY y = (activationFunction)(x1 + x2 - .5)
+x1  x2  y OR TRUTH TABLE
+0   0   0
+0   1   1
+1   0   1
+1   1   1
+
+What is a TENSOR -- describes an array of multiple dimensions.
+
+Cost function -- determines whether the model is good or not. || "label" - "model prediction" ||
+    Also known as a LOSS function or OBJECTIVE function.
+    YOU WANT THE COST OR THE LOST AS LOW AS POSSIBLE.
+
+Gradient - if the value of the slope of loss is positive the weigths adjust negative until we get a 0 slope
+
+The optimal shape of the activation function is an 'S'
+
+LOGISTIC FUNCTION IS LOWKEY GAS THOUGH
+
+Gradient decent training means to pull the slope of the loss function towards zero.
+
+
+
+
+

@@ -1,0 +1,33 @@
+You input data and and answers then you find the rules.
+
+The model is a mathematical formula. Polynomial is a model. A model describes a curve.
+
+It is an underlying mathemtaical structure.
+
+A general mathematical expression can be considered a model.
+
+-- TAYLOR EXPANSION --
+
+f(0) + (f'(0)/1!)x + (f''(0)/2!)x^2 + (f'''(0)/3!)x^3
+
+This can be made to represent almost every function.
+
+INNER PRODUCT
+
+Everything is based off dot product.  SUM of Wi *Xi + b. W and X are both vectors and the offset.
+
+You multiply and sum the vector products.
+
+Activation function is the final part to complete every function. it is Non linear. RElu
+
+LEARN ReLU(x) rectified linear unit
+
+ReLU ignores negetive numbers and only uses positive numbers.
+
+To train the model is to further narrow your function to create more and more granular results.
+
+TO LEARN PARAMATERS AND FUNCTIONS. ITS MATH MAGIC.
+
+EACH LAYER IS A ROTATION MATRIX?? you rotate the coordinate plane to map the data and classify.
+
+secret number is 15
