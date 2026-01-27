@@ -1,0 +1,4 @@
+In my final submission I was never able to get ReLU to give me the correct results, 
+however due to a suggestion from Claude ai I swapped the activation function to the Sigmoid function.
+
+Because of this I also included my notes from deriving the sigmoid function.

@@ -1,0 +1,20 @@
+HOW TO TRAIN A PERCEPTRION W/O API
+
+answer: z = ReLU(x₁ + x₂ - 1.5)
+
+loss function: Least Square Error
+update the weights
+
+w1 = w1 - s * L'w1
+w2 = w2 - s * L'w2
+
+Loss - take the derivative of the each step within the summation
+
+ws are random at the begining. b is also completely random.
+
+then you calculate
+
+for int i = 4 {
+
+
+}

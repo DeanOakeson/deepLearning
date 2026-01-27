@@ -1,0 +1,8 @@
+notes 3
+
+
+update the parameters by a step
+guess the parameters randomly at the beginning of the training (DO NOT "RANDOMLY" GUESS ZERO)
+
+derive the expressions by hand so you can understand this shit.
+
