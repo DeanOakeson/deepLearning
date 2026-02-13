@@ -76,7 +76,7 @@ def sigmoidPrime(x):
 def main():
     learningRate = 0.01
     inputWeights = [1.1, 1.2, 1.4]
-    iteration = 100000
+    iteration = 10000
 
     weights = gradientDescent(
         inputWeights, iteration, learningRate, sigmoid, sigmoidPrime
