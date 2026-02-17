@@ -1,7 +1,16 @@
-import matplotlib.pyplot as plt
 import numpy as np
-import skimage
-
+import random
+import matplotlib.pyplot as plt
+from skimage.transform import iradon
+from skimage.util import random_noise
+import tensorflow as tf
+import skimage.io
+import skimage.filters
+from tensorflow import keras
+from tensorflow.keras import layers
+from skimage.data import shepp_logan_phantom
+from skimage.transform import radon, rescale
+from tensorflow.keras.layers import Conv2DTranspose, Conv2D, Input, InputLayer
 
 def phantom(n=256, p_type="modified shepp-logan", ellipses=None):
     # [[I, a, b, x0, y0, phi],
@@ -98,67 +107,137 @@ def _mod_shepp_logan():
 
 
 def main():
-    print("hello world\n")
-    print(plt.rcParams)
+
+    model = keras.Sequential([
+     layers.Conv2D(15, 3, strides=2, activation="relu", padding="same"),
+     layers.Conv2D(15, 3, activation="relu", padding="same"),
+     layers.Conv2D(20, 3, strides=2, activation="relu", padding="same"),
+     layers.Conv2D(20, 3, activation="relu", padding="same"),
+     layers.Conv2D(25, 3, strides=2, padding="same", activation="relu"),
+     layers.Conv2D(25, 3, activation="relu", padding="same"),
+     layers.Conv2DTranspose(25, 3, activation="relu", padding="same"),
+     layers.Conv2DTranspose(25, 3, activation="relu", padding="same", strides=2),
+     layers.Conv2DTranspose(20, 3, activation="relu", padding="same"),
+     layers.Conv2DTranspose(20, 3, activation="relu", padding="same", strides=2),
+     layers.Conv2DTranspose(15, 3, activation="relu", padding="same"),
+     layers.Conv2DTranspose(15, 3, activation="relu", padding="same", strides=2),
+     layers.Conv2D(1, 3, activation="relu", padding="same")
+    ])
+
+
 
     x = np.random.random(24)
-    E = [
-        [
-            x[0] - 0.0,
-            0.5 * x[1] + 0.2,
-            0.5 * x[2] + 0.2,
-            x[3] - 0.5,
-            x[4] - 0.5,
-            100 * x[5],
-        ],
-        [
-            x[6] - 0.1,
-            0.4 * x[7] + 0.2,
-            0.4 * x[8] + 0.2,
-            x[9] - 0.5,
-            x[10] - 0.5,
-            100 * x[11],
-        ],
-        [
-            x[12] - 0.2,
-            0.3 * x[13] + 0.2,
-            0.3 * x[14] + 0.2,
-            x[15] - 0.5,
-            x[16] - 0.5,
-            100 * x[17],
-        ],
-        [
-            x[18] - 0.3,
-            0.2 * x[19] + 0.2,
-            0.2 * x[20] + 0.2,
-            x[21] - 0.5,
-            x[22] - 0.5,
-            100 * x[23],
-        ],
-    ]
+    print(x[5])
 
-    P = phantom(n=256, p_type="ellipses", ellipses=E)
-    # pl.imshow (P, cmap=plt.cm.Greys_r)
 
-    sigma = 4
-    blurred = skimage.filters.gaussian(P, sigma=(sigma, sigma), truncate=3.5)
-    # skimage.io.imshow(blurred, cmap=plt.cm.Greys_r)
+# generate data
+    image_size = 64
+    num_phantoms = 1000
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4.5), sharex=True, sharey=True)
-    ax1.set_title("Original Shepp-Logan Phantom")
-    ax1.imshow(P, cmap=plt.cm.Greys_r)
+    noise_factor = 0.1     #0.05
+    noisy_img = []
+    clean_img = []
+    noisy_imgV = []
+    clean_imgV = []
+    clean_phan = []
+
+    img_size1 = 64
+    img_size2 = 64
+
+    for i in range(num_phantoms):
+        
+        a = np.random.randint(20,30,2)
+        #print(a)
+        
+        
+        x=np.random.random(24)
+        
+        E = [[   x[ 0]-0.0,   0.6*x[ 1]+0.2,   0.8*x[ 2]+0.2,    0.1*(x[ 3]-0.5),      0.1*(x[ 4]-0.5),   10*x[ 5]   ],
+             [   x[ 6]-0.1,   0.3*x[ 7]+0.2,   0.2*x[ 8]+0.2,    x[ 9]-0.5,      x[10]-0.5,   100*x[11]   ],
+             [   x[12]-0.2,   0.2*x[13]+0.2,   0.3*x[14]+0.2,    x[15]-0.5,      x[16]-0.5,   100*x[17]   ],
+             [   x[18]-0.3,   0.1*x[19]+0.2,   0.1*x[20]+0.2,    x[21]-0.5,      x[22]-0.5,   100*x[23]  ]] 
+        P = phantom (n = image_size, p_type = 'ellipses', ellipses = E)
+        
+        Pmax = np.max(P )
+        P0 =  P/(2*Pmax)
+        P0 = np.maximum(0, P0)
+        P0 = np.minimum(0.5, P0)
+        
+        P1  = P0 + noise_factor * tf.random.normal(shape=P0.shape)
+        
+        
+        # P1 = random_noise(P/1000, mode='poisson', seed=None, clip=True)
+        P1 = np.maximum(0, P1)
+        P1 = np.minimum(1, P1)
+        
+        clean_phan.append(P)    # Phantomss
+        
+        if i < 0.9*num_phantoms:
+            noisy_img.append(P1)    # Data
+            clean_img.append(P0)    # Targets
+        else:
+            noisy_imgV.append(P1)    # Data
+            clean_imgV.append(P0)    # Targets
+        
+    np_noisy_img = np.asarray(noisy_img)
+    np_clean_img = np.asarray(clean_img)
+    np_noisy_imgV = np.asarray(noisy_imgV)
+    np_clean_imgV = np.asarray(clean_imgV)
+    np_clean_phan = np.asarray(clean_phan)      
+
+    # prepare data axes as expected by models
+    np_noisy = np.expand_dims(np_noisy_img, axis=-1)
+    np_clean = np.expand_dims(np_clean_img, axis=-1)
+    np_noisyV = np.expand_dims(np_noisy_imgV, axis=-1)
+    np_cleanV = np.expand_dims(np_clean_imgV, axis=-1)
+    np_phan = np.expand_dims(np_clean_phan, axis=-1)
+    print(np.shape(np_noisy))
+
+    print(np.max(np_noisy))
+    print(np.max(np_clean))
+
+
+    model.compile(optimizer='adam', loss='mse')
+
+
+    #optimizer = keras.optimizers.Adam(lr=0.01)
+    #model.compile(loss='mse', optimizer=optimizer)
+
+    model.fit(np_noisy, 
+              np_clean, 
+              epochs=10, 
+              shuffle=True, 
+              validation_data=(np_noisyV, np_cleanV))
+
+    decoded_imgs=model(np_noisyV).numpy()
+
+    n = 10 
+    plt.figure(figsize=(20, 7))
+    plt.gray()
+    for i in range(n): 
+      # display original + noise 
+      bx = plt.subplot(3, n, i + 1) 
+      plt.title("original + noise") 
+      plt.imshow(tf.squeeze(np_noisyV[i])) 
+      bx.get_xaxis().set_visible(False) 
+      bx.get_yaxis().set_visible(False) 
+      
+      # display reconstruction 
+      cx = plt.subplot(3, n, i + n + 1) 
+      plt.title("reconstructed") 
+      plt.imshow(tf.squeeze(decoded_imgs[i])) 
+      cx.get_xaxis().set_visible(False) 
+      cx.get_yaxis().set_visible(False) 
+      
+      # display original 
+      ax = plt.subplot(3, n, i + 2*n + 1) 
+      plt.title("original") 
+      plt.imshow(tf.squeeze(np_cleanV[i])) 
+      ax.get_xaxis().set_visible(False) 
+      ax.get_yaxis().set_visible(False) 
+
     plt.show()
-    ax2.set_title("Blurred Image")
-    ax2.imshow(blurred, cmap=plt.cm.Greys_r)
-    plt.show()
-
-    # from a3.py
-    # plt.scatter(inputs[:, 0], inputs[:, 1])
-    # plt.plot(x, y, "-r")
-    # plt.ylim(-0.25, 1.25)
-    # plt.xlim(-0.25, 1.25)
-    # plt.show()
-    #
 
 
+   
 main()
