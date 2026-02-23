@@ -1,0 +1,23 @@
+CHALLENGING BOUNDARY
+
+input is (x,y)
+
+next layer is fully connected large layer
+
+output layer has two neurons using the one hot strategy
+
+create a challenging example to support this hypothiesis
+ - it doesnt matter how difficult the region is, with enough neurons you can model it accurately.
+
+
+
+[IMPORTANT NOTES] {
+    dont go more than two layers.
+    dont do conv network use fully connected dense network.
+}
+
+
+
+modify chapter03Larry2.ipynb
+
+write a summary at the top of the jupyternotebook delete unused cells.

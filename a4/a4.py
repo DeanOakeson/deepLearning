@@ -108,33 +108,96 @@ def _mod_shepp_logan():
 
 def main():
 
+    ##CNN BASE##
+    # model = keras.Sequential([
+    #     Conv2D(2, (3,3), activation='relu', padding='same', strides=1, use_bias=False),
+    #     Conv2D(2, (3,3), activation='relu', padding='same', strides=1, use_bias=False),
+    #     Conv2D(2, (3,3), activation='relu', padding='same', strides=1, use_bias=False),
+    #     Conv2D(1, (3,3), activation='relu', padding='same', use_bias=False)
+    # ])
+    
+    ##CNN WORSE##
+    # model = keras.Sequential([
+    #     Conv2D(2, (5,5), activation='relu', padding='same', strides=1, use_bias=False),
+    #     Conv2D(1, (3,3), activation='relu', padding='same', use_bias=False)
+    # ])
+    
+    ##CNN BETTER##
+    # model = keras.Sequential([
+    #     Conv2D(4, (3,3), activation='relu', padding='same', strides=1, use_bias=False),
+    #     Conv2D(4, (5,5), activation='relu', padding='same', strides=1, use_bias=False),
+    #     Conv2D(4, (7,7), activation='relu', padding='same', strides=1, use_bias=False),
+    #     Conv2D(4, (5,5), activation='relu', padding='same', strides=1, use_bias=False),
+    #     Conv2D(4, (3,3), activation='relu', padding='same', strides=1, use_bias=False),
+    #     Conv2D(1, (3,3), activation='linear', padding='same', use_bias=False)
+    #
+    #        ])
+
+    ## UNET BASE##
+    # model = keras.Sequential([
+    #  layers.Conv2D(15, 3, strides=2, activation="relu", padding="same"),
+    #  layers.Conv2D(15, 3, activation="relu", padding="same"),
+    #  layers.Conv2D(20, 3, strides=2, activation="relu", padding="same"),
+    #  layers.Conv2D(20, 3, activation="relu", padding="same"),
+    #  layers.Conv2D(25, 3, strides=2, padding="same", activation="relu"),
+    #  layers.Conv2D(25, 3, activation="relu", padding="same"),
+    #  layers.Conv2DTranspose(25, 3, activation="relu", padding="same"),
+    #  layers.Conv2DTranspose(25, 3, activation="relu", padding="same", strides=2),
+    #  layers.Conv2DTranspose(20, 3, activation="relu", padding="same"),
+    #  layers.Conv2DTranspose(20, 3, activation="relu", padding="same", strides=2),
+    #  layers.Conv2DTranspose(15, 3, activation="relu", padding="same"),
+    #  layers.Conv2DTranspose(15, 3, activation="relu", padding="same", strides=2),
+    #  layers.Conv2D(1, 3, activation="relu", padding="same")
+    # ])
+
+    ## UNET WORSE ##
+    # model = keras.Sequential([
+    #  layers.Conv2D(15, 3, strides=2, activation="relu", padding="same"),
+    #  layers.Conv2D(15, 3, activation="relu", padding="same"),
+    #  layers.Conv2D(20, 3, strides=2, activation="relu", padding="same"),
+    #  layers.Conv2D(20, 3, activation="relu", padding="same"),
+    #  layers.Conv2D(25, 3, strides=2, padding="same", activation="relu"),
+    #  layers.Conv2D(25, 3, activation="relu", padding="same"),
+    #  layers.Conv2D(30, 3, strides=2, padding="same", activation="relu"),
+    #  layers.Conv2D(30, 3, activation="relu", padding="same"),
+    #  layers.Conv2D(35, 3, strides=2, padding="same", activation="relu"),
+    #  layers.Conv2D(35, 3, activation="relu", padding="same"),
+    #
+    #
+    #  layers.Conv2DTranspose(35, 3, activation="relu", padding="same"),
+    #  layers.Conv2DTranspose(35, 3, activation="relu", padding="same", strides=2),
+    #  layers.Conv2DTranspose(30, 3, activation="relu", padding="same"),
+    #  layers.Conv2DTranspose(30, 3, activation="relu", padding="same", strides=2),
+    #  layers.Conv2DTranspose(25, 3, activation="relu", padding="same"),
+    #  layers.Conv2DTranspose(25, 3, activation="relu", padding="same", strides=2),
+    #  layers.Conv2DTranspose(20, 3, activation="relu", padding="same"),
+    #  layers.Conv2DTranspose(20, 3, activation="relu", padding="same", strides=2),
+    #  layers.Conv2DTranspose(15, 3, activation="relu", padding="same"),
+    #  layers.Conv2DTranspose(15, 3, activation="relu", padding="same", strides=2),
+    #  layers.Conv2D(1, 3, activation="relu", padding="same")
+    # ])
+
+    ## UNET BETTER ##
     model = keras.Sequential([
-     layers.Conv2D(15, 3, strides=2, activation="relu", padding="same"),
-     layers.Conv2D(15, 3, activation="relu", padding="same"),
      layers.Conv2D(20, 3, strides=2, activation="relu", padding="same"),
      layers.Conv2D(20, 3, activation="relu", padding="same"),
-     layers.Conv2D(25, 3, strides=2, padding="same", activation="relu"),
-     layers.Conv2D(25, 3, activation="relu", padding="same"),
-     layers.Conv2DTranspose(25, 3, activation="relu", padding="same"),
-     layers.Conv2DTranspose(25, 3, activation="relu", padding="same", strides=2),
+     layers.Conv2D(40, 3, strides=2, activation="relu", padding="same"),
+     layers.Conv2D(40, 3, activation="relu", padding="same"),
+     layers.Conv2DTranspose(40, 3, activation="relu", padding="same"),
+     layers.Conv2DTranspose(40, 3, activation="relu", padding="same", strides=2),
      layers.Conv2DTranspose(20, 3, activation="relu", padding="same"),
      layers.Conv2DTranspose(20, 3, activation="relu", padding="same", strides=2),
-     layers.Conv2DTranspose(15, 3, activation="relu", padding="same"),
-     layers.Conv2DTranspose(15, 3, activation="relu", padding="same", strides=2),
-     layers.Conv2D(1, 3, activation="relu", padding="same")
+     layers.Conv2D(1, 3, activation="linear", padding="same")
     ])
-
-
 
     x = np.random.random(24)
     print(x[5])
-
 
 # generate data
     image_size = 64
     num_phantoms = 1000
 
-    noise_factor = 0.1     #0.05
+    noise_factor = 0.05     #0.1
     noisy_img = []
     clean_img = []
     noisy_imgV = []
@@ -199,13 +262,12 @@ def main():
 
     model.compile(optimizer='adam', loss='mse')
 
-
     #optimizer = keras.optimizers.Adam(lr=0.01)
     #model.compile(loss='mse', optimizer=optimizer)
 
     model.fit(np_noisy, 
               np_clean, 
-              epochs=10, 
+              epochs=100, 
               shuffle=True, 
               validation_data=(np_noisyV, np_cleanV))
 
@@ -213,6 +275,7 @@ def main():
 
     n = 10 
     plt.figure(figsize=(20, 7))
+    plt.title("parameters used: %i" %model.count_params())
     plt.gray()
     for i in range(n): 
       # display original + noise 
